@@ -139,6 +139,5 @@ dmypy.json
 cython_debug/
 
 .idea/
-test_db.py
-requests_history.db
-.log
+!/test_db.py
+!/requests_history.db

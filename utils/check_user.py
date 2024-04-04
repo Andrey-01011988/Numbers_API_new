@@ -5,6 +5,8 @@ from database.core import crud
 
 from loguru import logger
 
+from utils.remove_queries import del_queries
+
 logger.add("out.log", backtrace=True, diagnose=True)
 update_nfo = crud.update()
 
@@ -13,13 +15,16 @@ update_nfo = crud.update()
 def check_user(message: Message) -> bool:
     """
     Проверяет есть ли пользователь в базе данных и изменяет
-    информацию о пользователе если он её поменял
+    информацию о пользователе если он её поменял.
+    Удаляет не отображаемые данные из таблицы результатов (оставляет последние 10)
 
     :param message: сообщение пользователя
     :return:
     """
     user_id = message.from_user.id
     data = {}
+
+    del_queries(user_id)  # Удаление лишних записей из таблицы QueryResult
 
     if User.get_or_none(User.user_id == user_id):
         user_info = User.get(User.user_id == user_id)
